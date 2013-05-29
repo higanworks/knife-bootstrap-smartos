@@ -1,0 +1,81 @@
+bash -c '
+<%= "export http_proxy=\"#{knife_config[:bootstrap_proxy]}\"" if knife_config[:bootstrap_proxy] -%>
+
+exists() {
+  if command -v $1 &>/dev/null
+  then
+    return 0
+  else
+    return 1
+  fi
+}
+
+
+if ! exists /opt/local/bin/chef-client; then
+  pkgin -y install gcc47 gcc47-runtime scmgit-base scmgit-docs gmake ruby193-base ruby193-yajl ruby193-nokogiri ruby193-readline pkg-config
+
+## for smf cookbook
+  pkgin -y install libxslt
+#
+#
+## install chef
+  gem update --system
+  gem install --no-ri --no-rdoc ohai
+  gem install --no-ri --no-rdoc chef
+  gem install --no-ri --no-rdoc rb-readline
+fi
+
+mkdir -p /etc/chef
+
+(
+cat <<'EOP'
+<%= validation_key %>
+EOP
+) > /tmp/validation.pem
+nawk NF /tmp/validation.pem > /etc/chef/validation.pem
+rm /tmp/validation.pem
+chmod 0600 /etc/chef/validation.pem
+
+<% if @chef_config[:encrypted_data_bag_secret] -%>
+(
+cat <<'EOP'
+<%= encrypted_data_bag_secret %>
+EOP
+) > /tmp/encrypted_data_bag_secret
+nawk NF /tmp/encrypted_data_bag_secret > /etc/chef/encrypted_data_bag_secret
+rm /tmp/encrypted_data_bag_secret
+chmod 0600 /etc/chef/encrypted_data_bag_secret
+<% end -%>
+
+<%# Generate Ohai Hints -%>
+<% unless @chef_config[:knife][:hints].nil? || @chef_config[:knife][:hints].empty? -%>
+mkdir -p /etc/chef/ohai/hints
+
+<%# install joyent_attr_plugin -%>
+install -d /opt/local/etc/ohai/plugins -m 0755
+curl -skf -o /opt/local/etc/ohai/plugins/joyent.rb https://raw.github.com/ZCloud-Firstserver/ohai_plugin_joyent/master/plugins/joyent.rb
+
+
+<% @chef_config[:knife][:hints].each do |name, hash| -%>
+(
+cat <<'EOP'
+<%= hash.to_json %>
+EOP
+) > /etc/chef/ohai/hints/<%= name %>.json
+<% end -%>
+<% end -%>
+
+(
+cat <<'EOP'
+<%= config_content %>
+Ohai::Config[:plugin_path] << '/opt/local/etc/ohai/plugins'
+EOP
+) > /etc/chef/client.rb
+
+(
+cat <<'EOP'
+<%= first_boot.to_json %>
+EOP
+) > /etc/chef/first-boot.json
+
+<%= start_chef %>'
