@@ -29,6 +29,6 @@ Contributing
 
 License and Authors
 -------------------
-Authors: sawanobory(HiganWorks LLC)
+Author: sawanobory(HiganWorks LLC)
 
 License: Apache2
