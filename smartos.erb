@@ -51,11 +51,6 @@ chmod 0600 /etc/chef/encrypted_data_bag_secret
 <% unless @chef_config[:knife][:hints].nil? || @chef_config[:knife][:hints].empty? -%>
 mkdir -p /etc/chef/ohai/hints
 
-<%# install joyent_attr_plugin -%>
-install -d /opt/local/etc/ohai/plugins -m 0755
-curl -skf -o /opt/local/etc/ohai/plugins/joyent.rb https://raw.github.com/ZCloud-Firstserver/ohai_plugin_joyent/master/plugins/joyent.rb
-
-
 <% @chef_config[:knife][:hints].each do |name, hash| -%>
 (
 cat <<'EOP'
@@ -64,6 +59,10 @@ EOP
 ) > /etc/chef/ohai/hints/<%= name %>.json
 <% end -%>
 <% end -%>
+
+<%# install joyent_attr_plugin -%>
+install -d /opt/local/etc/ohai/plugins -m 0755
+curl -skf -o /opt/local/etc/ohai/plugins/joyent.rb https://raw.github.com/ZCloud-Firstserver/ohai_plugin_joyent/master/plugins/joyent.rb
 
 (
 cat <<'EOP'
