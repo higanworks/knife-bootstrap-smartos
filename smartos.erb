@@ -68,7 +68,7 @@ EOP
 (
 cat <<'EOP'
 <%= config_content %>
-<% puts "Ohai::Config[:plugin_path] << '/opt/local/etc/ohai/plugins'" %>
+Ohai::Config[:plugin_path] << "/opt/local/etc/ohai/plugins"
 EOP
 ) > /etc/chef/client.rb
 
