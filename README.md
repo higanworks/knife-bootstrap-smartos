@@ -3,6 +3,8 @@ knife-bootstrap-smartos
 
 knife bootstrap distro for joyent smartmachine
 
+Its includes [ohai plugin joyent](https://github.com/ZCloud-Firstserver/ohai_plugin_joyent).
+
 Usage
 ---
 
