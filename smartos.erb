@@ -71,6 +71,7 @@ curl -skf -o /opt/local/etc/ohai/plugins/joyent.rb https://raw.github.com/ZCloud
 cat <<'EOP'
 <%= config_content %>
 Ohai::Config[:plugin_path] << "/opt/local/etc/ohai/plugins"
+ENV['PATH'] = "/opt/local/bin:/opt/local/sbin:/usr/bin:/usr/sbin"
 EOP
 ) > /etc/chef/client.rb
 
