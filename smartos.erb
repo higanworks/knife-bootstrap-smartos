@@ -10,8 +10,8 @@ exists() {
   fi
 }
 
-<% if knife_config[:chef_node_name] %>
-/opt/local/bin/sm-set-hostname <%= knife_config[:chef_node_name] %>
+<% if @config[:chef_node_name] %>
+/opt/local/bin/sm-set-hostname <%= @config[:chef_node_name] %>
 <% end %>
 
 if ! exists /opt/local/bin/chef-client; then
