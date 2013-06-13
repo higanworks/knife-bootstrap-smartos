@@ -10,7 +10,7 @@ Usage
 
 Add bootstrap repository as submodule to your chef-repo.
 
-`git submodule add git://github.com/ZCloud-Firstserver/knife-bootstrap-smartos.git .chef/bootstra`
+`git submodule add git://github.com/ZCloud-Firstserver/knife-bootstrap-smartos.git .chef/bootstrap`
 
 Bootstrap with --distro(-d) option
 
