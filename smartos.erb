@@ -10,6 +10,9 @@ exists() {
   fi
 }
 
+<% if knife_config[:chef_node_name] %>
+/opt/local/bin/sm-set-hostname <%= knife_config[:chef_node_name] %>
+<% end %>
 
 if ! exists /opt/local/bin/chef-client; then
   pkgin -y install gcc47 gcc47-runtime scmgit-base scmgit-docs gmake ruby193-base ruby193-yajl ruby193-nokogiri ruby193-readline pkg-config
