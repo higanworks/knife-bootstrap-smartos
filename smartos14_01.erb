@@ -15,7 +15,7 @@ exists() {
 <% end %>
 
 if ! exists /opt/local/bin/chef-client; then
-  pkgin -y install gcc47 gcc47-runtime scmgit-base scmgit-docs gmake ruby193-base ruby193-yajl ruby193-nokogiri ruby193-readline pkg-config
+  pkgin install gcc47 git gmake ruby211-base ruby211-yajl ruby211-nokogiri ruby211-readline pkg-config
 
 ## for smf cookbook
   pkgin -y install libxslt
