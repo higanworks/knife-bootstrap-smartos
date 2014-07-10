@@ -25,6 +25,7 @@ if ! exists /opt/local/bin/chef-client; then
   gem update --system --no-ri --no-rdoc
   gem install --no-ri --no-rdoc ohai
   gem install --no-ri --no-rdoc chef
+  gem install --no-ri --no-rdoc builder
   gem install --no-ri --no-rdoc rb-readline
 fi
 
@@ -39,7 +40,8 @@ nawk NF /tmp/validation.pem > /etc/chef/validation.pem
 rm /tmp/validation.pem
 chmod 0600 /etc/chef/validation.pem
 
-<% if @chef_config[:encrypted_data_bag_secret] -%>
+<% if @config[:secret_file] -%>
+<% encrypted_data_bag_secret = File.read(@config[:secret_file]) -%>
 (
 cat <<'EOP'
 <%= encrypted_data_bag_secret %>
